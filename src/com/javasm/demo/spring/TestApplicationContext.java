@@ -1,6 +1,7 @@
 package com.javasm.demo.spring;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -68,6 +69,20 @@ public class TestApplicationContext {
     }
 
     private Object createBean(String beanName, BeanDefinition beanDefinition) {
+        Class classType = beanDefinition.getType(); //当前创建bean的类
+        try {
+            Object instance = classType.getConstructor().newInstance();
+            return instance;
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 
