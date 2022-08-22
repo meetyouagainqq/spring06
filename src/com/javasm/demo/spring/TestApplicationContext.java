@@ -42,8 +42,8 @@ public class TestApplicationContext {
                                 Component component = loadClass.getAnnotation(Component.class);
                                 String beanName = component.value();
                                 //当component注解的名称为空时
-                                if ("".equals(beanName)){
-                                    beanName= Introspector.decapitalize(loadClass.getSimpleName());
+                                if ("".equals(beanName)) {
+                                    beanName = Introspector.decapitalize(loadClass.getSimpleName());
                                 }
                                 //证明是一个bean;同时说明程序员生成了一个bean
                                 BeanDefinition beanDefinition = new BeanDefinition();
@@ -82,8 +82,11 @@ public class TestApplicationContext {
             for (Field field : classType.getDeclaredFields()) {
                 if (field.isAnnotationPresent(Autowired.class)) {
                     field.setAccessible(true);
-                    field.set(instance,getBean(field.getName()));
+                    field.set(instance, getBean(field.getName()));
                 }
+            }
+            if (instance instanceof BeanNameAware) {
+              ((BeanNameAware) instance).setBeanName(beanName);
             }
             return instance;
         } catch (InstantiationException e) {
