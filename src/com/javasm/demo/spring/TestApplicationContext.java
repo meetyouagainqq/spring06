@@ -1,6 +1,8 @@
 package com.javasm.demo.spring;
 
+import java.beans.Introspector;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,6 +41,10 @@ public class TestApplicationContext {
                             if (loadClass.isAnnotationPresent(Component.class)) {
                                 Component component = loadClass.getAnnotation(Component.class);
                                 String beanName = component.value();
+                                //当component注解的名称为空时
+                                if ("".equals(beanName)){
+                                    beanName= Introspector.decapitalize(loadClass.getSimpleName());
+                                }
                                 //证明是一个bean;同时说明程序员生成了一个bean
                                 BeanDefinition beanDefinition = new BeanDefinition();
                                 beanDefinition.setType(loadClass);
@@ -72,6 +78,13 @@ public class TestApplicationContext {
         Class classType = beanDefinition.getType(); //当前创建bean的类
         try {
             Object instance = classType.getConstructor().newInstance();
+            //实现属性的依赖注入
+            for (Field field : classType.getDeclaredFields()) {
+                if (field.isAnnotationPresent(Autowired.class)) {
+                    field.setAccessible(true);
+                    field.set(instance,getBean(field.getName()));
+                }
+            }
             return instance;
         } catch (InstantiationException e) {
             e.printStackTrace();
