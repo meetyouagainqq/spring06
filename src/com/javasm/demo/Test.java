@@ -12,7 +12,7 @@ public class Test {
 //        System.out.println(context.getBean("userService"));
 //        System.out.println(context.getBean("userService"));
 //        System.out.println(context.getBean("orderService"));
-        UserService userService = (UserService) context.getBean("userService");
+         UserService userService = (UserService) context.getBean("userService");
         userService.test();
     }
 }

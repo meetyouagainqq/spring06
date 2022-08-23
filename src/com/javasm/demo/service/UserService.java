@@ -1,13 +1,10 @@
 package com.javasm.demo.service;
 
-import com.javasm.demo.spring.Autowired;
-import com.javasm.demo.spring.BeanNameAware;
-import com.javasm.demo.spring.Component;
-import com.javasm.demo.spring.Scope;
+import com.javasm.demo.spring.*;
 
 @Component
 @Scope("prototype")
-public class UserService implements BeanNameAware {
+public class UserService implements BeanNameAware, InitializingBean {
     @Autowired
     private OrderService orderService;
     private String beanName;
@@ -20,5 +17,10 @@ public class UserService implements BeanNameAware {
     @Override
     public void setBeanName(String beanName) {
         this.beanName = beanName;
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        System.out.println("初始化方法执行!");
     }
 }
