@@ -48,8 +48,6 @@ public class TestApplicationContext {
                                     BeanPostProcessor instance = (BeanPostProcessor) loadClass.newInstance();
                                     beanPostProcessorList.add(instance);
                                 }
-
-
                                 Component component = loadClass.getAnnotation(Component.class);
                                 String beanName = component.value();
                                 //当component注解的名称为空时
